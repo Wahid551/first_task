@@ -89,7 +89,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     listItems();
     return Scaffold(
       backgroundColor: Colors.white,
