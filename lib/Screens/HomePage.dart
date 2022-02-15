@@ -1,7 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:first_task/Screens/components.dart';
+// import 'package:first_task/Screens/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+// import 'package:badges/badges.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<Widget> imageSliders = [];
-
+  int _current = 0;
   void listItems() {
     Size size = MediaQuery.of(context).size;
     imageSliders = imgList
@@ -35,50 +37,47 @@ class _HomePageState extends State<HomePage> {
                     height: size.height * 10,
                   ),
                   Positioned(
-                    bottom: 0.0,
+                      left: 20.0,
+                      top: 24.0,
+                      right: 0,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Image.asset(
+                          'assets/icons/icons-light-close@3x.png',
+                          height: 24,
+                        ),
+                      )),
+                  Positioned(
                     left: 0.0,
-                    right: 0.0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(200, 0, 0, 0),
-                            Color.fromARGB(0, 0, 0, 0)
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 20.0),
-                      child: Text(
-                        'No. ${imgList.indexOf(item)} image',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    top: 24.0,
+                    right: 20.0,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Image.asset(
+                        'assets/icons/icons-light-setting@3x.png',
+                        height: 24,
                       ),
                     ),
                   ),
                   Positioned(
-                    left: 0.0,
-                    top: 15.0,
-                    right: 250,
-                    child: Icon(
-                      Icons.cancel_outlined,
-                      color: Colors.white,
-                      size: 30.0,
-                    ),
-                  ),
-                  Positioned(
-                    left: 250.0,
-                    top: 15.0,
-                    right: 0,
-                    child: Icon(
-                      Icons.menu,
-                      color: Colors.white,
-                      size: 30.0,
+                    left: 145.0,
+                    bottom: 10.0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: imgList.map((url) {
+                        int index = imgList.indexOf(url);
+                        return Container(
+                          width: 8.0,
+                          height: 8.0,
+                          margin: EdgeInsets.symmetric(
+                              vertical: 10.0, horizontal: 2.0),
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _current == index
+                                  ? Color(0xFFFFFFFF)
+                                  : Color.fromARGB(186, 216, 218, 208)),
+                        );
+                      }).toList(),
                     ),
                   ),
                 ],
@@ -95,8 +94,17 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       // appBar: AppBar(title: Text('Vertical sliding carousel demo')),
       bottomSheet: Container(
-        height: 250,
+        // color: Colors.red,
+        // width: double.infinity,
+        height: 239,
         child: Card(
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+          ),
           elevation: 10.0,
           child: Padding(
             padding: EdgeInsets.only(left: 15.0, right: 5.0, top: 10.0),
@@ -104,10 +112,13 @@ class _HomePageState extends State<HomePage> {
               children: [
                 ListTile(
                   leading: ClipRRect(
-                    // borderRadius: BorderRadius.circular(30.0),
+                    borderRadius: BorderRadius.circular(5.0),
                     child: Image.network(
                       'https://googleflutter.com/sample_image.jpg',
-                      height: 62.95,
+                      // width: 100,
+                      height: 70,
+                      width: 65,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   title: Align(
@@ -115,94 +126,119 @@ class _HomePageState extends State<HomePage> {
                     child: Text(
                       'John’s Doe',
                       style: TextStyle(
-                          fontSize: 20.0,
+                          fontFamily: 'Montserrat',
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF4C5264)),
                     ),
                   ),
-                  subtitle: Row(
-                    children: [
-                      Text(
-                        '4.5',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4C5264)),
-                      )
-                    ],
+                  subtitle: Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      // mainAxisAlignment: MainAxisAlignment.sp,
+                      children: [
+                        Text(
+                          '4.5',
+                          style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF4C5264)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.7),
+                          child: Icon(
+                            Icons.star,
+                            color: Color(0xFFFFB900),
+                            size: 15,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   trailing: Container(
-                    width: 60,
-                    height: 60,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       color: Colors.black,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: Icon(
                       Icons.chat,
                       color: Colors.white,
+                      size: 18,
                     ),
                   ),
                 ),
                 Divider(
                   color: Color(0xFF4C5264),
                 ),
-                ListTile(
-                  leading: Text(
-                    'TIMER',
-                    style: TextStyle(
-                      color: Color(0xFF4C5264),
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  title: Align(
+                // ListTile(
+                //   leading: Text(
+                //     'TIMER',
+                //     style: TextStyle(
+                //       color: Color(0xFF4C5264),
+                //       fontSize: 22.0,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                //   title: Align(
+                //     alignment: Alignment.center,
+                //     child: Text(
+                //       '00:10:24',
+                //       style: TextStyle(
+                //         color: Color(0xFFF98411),
+                //         fontSize: 20.0,
+                //         fontWeight: FontWeight.w500,
+                //       ),
+                //     ),
+                //   ),
+                //   trailing: Container(
+                //     width: 50,
+                //     height: 50,
+                //     decoration: BoxDecoration(
+                //       color: Colors.black,
+                //       borderRadius: BorderRadius.circular(20),
+                //     ),
+                //     child: Icon(
+                //       Icons.pause,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      '00:10:24',
+                      'Get your gear setup & ready to work.',
                       style: TextStyle(
-                        color: Color(0xFFF98411),
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        color: Color(0xFF4C5264),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  trailing: Container(
-                    width: 50,
-                    height: 50,
+                ),
+                // SizedBox(
+                //   height: 10.0,
+                // ),
+                Padding(
+                  padding: EdgeInsets.only(top: 24.0),
+                  child: Container(
+                    width: 305,
+                    height: 58,
                     decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20),
+                      color: Color(0xFF2E2E2E),
+                      borderRadius: BorderRadius.circular(52),
                     ),
                     child: Icon(
-                      Icons.pause,
+                      Icons.arrow_forward,
+                      size: 24.0,
                       color: Colors.white,
                     ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    'Get your gear setup & ready to work.',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Color(0xFF4C5264),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Container(
-                  width: 110,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Icon(
-                    Icons.arrow_right_outlined,
-                    size: 40.0,
                   ),
                 ),
               ],
@@ -214,125 +250,295 @@ class _HomePageState extends State<HomePage> {
         child: SafeArea(
           child: Column(
             children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    Container(
-                      // width: size.width*50,
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          aspectRatio: 2,
-                          enlargeCenterPage: true,
-                          scrollDirection: Axis.horizontal,
-                          viewportFraction: 1,
-                          // enlargeStrategy: CenterPageEnlargeStrategy.height,
-                          autoPlay: true,
+              Column(
+                children: [
+                  Container(
+                    // width: size.width*50,
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        aspectRatio: 2,
+                        enlargeCenterPage: true,
+                        scrollDirection: Axis.horizontal,
+                        viewportFraction: 1,
+                        // enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        autoPlay: true,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _current = index;
+                          });
+                        },
+                      ),
+                      items: imageSliders,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 24.0, right: 6.0, top: 10.0),
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      // mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Lawn Mowing',
+                          style: TextStyle(
+                              fontFamily: 'Quicksand',
+                              fontSize: 22.0,
+                              color: Color(0xFF43A236),
+                              fontWeight: FontWeight.bold),
                         ),
-                        items: imageSliders,
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(left: 15.0, right: 6.0, top: 10.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        // crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Lawn Mowing',
-                              style: TextStyle(
-                                  fontSize: 22.0,
-                                  color: Color(0xFF43A236),
-                                  fontWeight: FontWeight.bold),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          'Small Grass - 3 hours',
+                          style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 16.0,
+                              color: Color(0xFF4C5264),
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/ico.svg',
+                              color: Color(0xFF43A236),
+                              height: 15.51,
                             ),
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Small Grass - 3 hours',
-                              style: TextStyle(
-                                  fontSize: 16.0,
+                            Padding(
+                              padding: EdgeInsets.only(left: 25.49),
+                              child: Text(
+                                'Today 5th March 2019, 07:30 AM',
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
                                   color: Color(0xFF4C5264),
-                                  fontWeight: FontWeight.bold),
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: 41,
+                            top: 10.0,
+                            bottom: 10.0,
+                          ),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Recurring, Every 2 weeks',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 16.0,
+                                color: Color(0xFF4C5264),
+                                fontWeight: FontWeight.normal,
+                              ),
                             ),
                           ),
-                          SizedBox(
-                            height: 15.0,
+                        ),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/path.svg',
+                              color: Color(0xFF43A236),
+                              height: 15.51,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 28.49),
+                              child: Text(
+                                '221B Baker Street',
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  color: Color(0xFF4C5264),
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            left: 41,
+                            top: 0.0,
+                            bottom: 10.0,
                           ),
-                          SingleItem(
-                            icon: 'ico.svg',
-                            title: 'Today 5th March 2019, 07:30 AM',
-                            subTitle: 'Recurring, Every 2 weeks',
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Sector 28, Phase 2, New York, USA',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 16.0,
+                                color: Color(0xFF4C5264),
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
                           ),
-                          SingleItem(
-                            icon: 'path.svg',
-                            title: '221B Baker Street',
-                            subTitle: 'Sector 28, Phase 2, New York, USA',
-                          ),
-                          SingleItem(
-                              icon: '',
-                              title:
-                                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-                              subTitle: ''),
-                          SizedBox(
-                            height: 250,
-                          ),
-                        ],
-                      ),
+                        ),
+                        // ListTile(
+                        //   leading: Text('Wahid'),
+                        //   minLeadingWidth: 15.51,
+                        // ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.menu,
+                              color: Color(0xFF43A236),
+                              size: 15.51,
+                            ),
+                            SizedBox(
+                              width: 25.0,
+                            ),
+                            Expanded(
+                              flex: 30,
+                              child: Text(
+                                'Lorem Ipsum is simply dummy, typesetting industry Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                                // textDirection: TextDirection.ltr,
+                                style: TextStyle(
+                                  // overflow: TextOverflow.ellipsis,
+                                  fontFamily: 'Montserrat',
+                                  color: Color(0xFF4C5264),
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w300,
+                                  // overflow: TextOverflow.ellipsis,
+                                ),
+
+                                // softWrap: true,
+                                // textAlign: TextAlign.justify,
+                                // overflow: TextOverflow.ellipsis,
+                                // maxLines: 5,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 239,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        // backgroundColor: Color(0xFF2E2E2E),
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            label: '',
-            icon: Icon(
-              Icons.calendar_today_outlined,
-            ),
-            backgroundColor: Color(0xFF2E2E2E),
+      bottomNavigationBar: Container(
+        width: double.infinity,
+        height: 64,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(14),
+            topRight: Radius.circular(14),
           ),
-          BottomNavigationBarItem(
-            label: '',
-            icon: Icon(
-              Icons.new_label_outlined,
+          color: Color(0xFF2E2E2E),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            GestureDetector(
+              onTap: () {},
+              child: Image.asset(
+                'assets/icons/calender.png',
+                height: 24.5,
+              ),
             ),
-            backgroundColor: Color(0xFF2E2E2E),
-          ),
-          BottomNavigationBarItem(
-            label: '',
-            icon: Icon(
-              Icons.chat_bubble_outline_sharp,
+            SizedBox(
+              height: 23.3,
+              width: 2,
+              child: Container(
+                // height:20,
+                color: Color(0xFF4C5264),
+              ),
             ),
-            backgroundColor: Color(0xFF2E2E2E),
-          ),
-          BottomNavigationBarItem(
-            label: '',
-            icon: Icon(
-              Icons.notifications_active_outlined,
+            Badge(
+              position: BadgePosition.topEnd(top: -14),
+              // alignment: Alignment.topRight,
+
+              badgeContent: Text(
+                '5',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white,
+                ),
+              ),
+              badgeColor: Color(0xFFF9C311),
+              child: GestureDetector(
+                onTap: () {},
+                child: Image.asset(
+                  'assets/icons/np_new-project_643613_000000@3x.png',
+                  height: 24.5,
+                ),
+              ),
             ),
-            backgroundColor: Color(0xFF2E2E2E),
-          ),
-          BottomNavigationBarItem(
-            label: '',
-            icon: Icon(
-              Icons.chat_bubble_outline_sharp,
+            SizedBox(
+              height: 23.3,
+              width: 2,
+              child: Container(
+                // height:20,
+                color: Color(0xFF4C5264),
+              ),
             ),
-            backgroundColor: Color(0xFF2E2E2E),
-          ),
-        ],
+            Badge(
+              // borderRadius: BorderRadius.circular(5),
+              position: BadgePosition.topEnd(top: -14),
+              // alignment: Alignment.topRight,
+
+              badgeContent: Text(
+                '5',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.white,
+                ),
+              ),
+              badgeColor: Color(0xFFF9C311),
+              child: GestureDetector(
+                onTap: () {},
+                child: Icon(
+                  Icons.chat,
+                  size: 25,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 23.3,
+              width: 2,
+              child: Container(
+                // height:20,
+                color: Color(0xFF4C5264),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Image.asset(
+                'assets/icons/path@3x.png',
+                height: 24.5,
+              ),
+            ),
+            SizedBox(
+              height: 23.3,
+              width: 2,
+              child: Container(
+                // height:20,
+                color: Color(0xFF4C5264),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Image.asset(
+                'assets/icons/np_more_2680300_000000@3x.png',
+                height: 5.78,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

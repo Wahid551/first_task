@@ -19,7 +19,7 @@ class _SingleItemState extends State<SingleItem> {
           ? SvgPicture.asset(
               'assets/icons/${widget.icon}',
               color: Color(0xFF43A236),
-              height: 20.51,
+              height: 15.51,
             )
           : Icon(
               Icons.menu,
@@ -29,16 +29,19 @@ class _SingleItemState extends State<SingleItem> {
       title: Text(
         widget.title,
         style: TextStyle(
+          fontFamily: 'Montserrat',
           color: Color(0xFF4C5264),
           fontSize: 16.0,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
       ),
       subtitle: Text(
         widget.subTitle,
         style: TextStyle(
-          fontSize: 18.0,
+          fontFamily: 'Montserrat',
+          fontSize: 16.0,
           color: Color(0xFF4C5264),
+          fontWeight: FontWeight.normal,
         ),
       ),
     );
