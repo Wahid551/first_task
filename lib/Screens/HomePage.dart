@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> imageSliders = [];
   int _current = 0;
-  bool isClicked = false;
+  // bool isClicked = false;
   void listItems() {
     Size size = MediaQuery.of(context).size;
     imageSliders = imgList
