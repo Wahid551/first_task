@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                   title: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      'John’s Doe',
+                      'John\'ss Doe',
                       style: TextStyle(
                           fontFamily: 'Montserrat',
                           fontSize: 16.0,
