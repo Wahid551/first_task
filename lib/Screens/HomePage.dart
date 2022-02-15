@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> imageSliders = [];
   int _current = 0;
+  // bool isClicked = false;
   void listItems() {
     Size size = MediaQuery.of(context).size;
     imageSliders = imgList
@@ -61,24 +62,27 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Positioned(
-                    left: 145.0,
-                    bottom: 10.0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: imgList.map((url) {
-                        int index = imgList.indexOf(url);
-                        return Container(
-                          width: 8.0,
-                          height: 8.0,
-                          margin: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 2.0),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _current == index
-                                  ? Color(0xFFFFFFFF)
-                                  : Color.fromARGB(186, 216, 218, 208)),
-                        );
-                      }).toList(),
+                    // left: 145.0,
+                    // bottom: 10.0,
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: imgList.map((url) {
+                          int index = imgList.indexOf(url);
+                          return Container(
+                            width: 8.0,
+                            height: 8.0,
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10.0, horizontal: 2.0),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _current == index
+                                    ? Color(0xFFFFFFFF)
+                                    : Color.fromARGB(186, 216, 218, 208)),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ],
@@ -92,170 +96,6 @@ class _HomePageState extends State<HomePage> {
     listItems();
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(title: Text('Vertical sliding carousel demo')),
-      bottomSheet: Container(
-        // color: Colors.red,
-        // width: double.infinity,
-        decoration: new BoxDecoration(
-          boxShadow: [
-            new BoxShadow(
-              color: Colors.black54,
-              blurRadius: 20.0,
-            ),
-          ],
-        ),
-        height: 239,
-        child: Card(
-          margin: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
-          ),
-          elevation: 20.0,
-          shadowColor: Colors.black,
-          child: Padding(
-            padding: EdgeInsets.only(left: 15.0, right: 5.0, top: 10.0),
-            child: Column(
-              children: [
-                ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Image.network(
-                      'https://googleflutter.com/sample_image.jpg',
-                      // width: 100,
-                      height: 70,
-                      width: 65,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  title: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'John’s Doe',
-                      style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4C5264)),
-                    ),
-                  ),
-                  subtitle: Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      // mainAxisAlignment: MainAxisAlignment.sp,
-                      children: [
-                        Text(
-                          '4.5',
-                          style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF4C5264)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 5.7),
-                          child: Icon(
-                            Icons.star,
-                            color: Color(0xFFFFB900),
-                            size: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  trailing: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      Icons.chat,
-                      color: Colors.white,
-                      size: 18,
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: Color(0xFF4C5264),
-                  thickness: 0.05,
-                ),
-                // ListTile(
-                //   leading: Text(
-                //     'TIMER',
-                //     style: TextStyle(
-                //       color: Color(0xFF4C5264),
-                //       fontSize: 22.0,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                //   title: Align(
-                //     alignment: Alignment.center,
-                //     child: Text(
-                //       '00:10:24',
-                //       style: TextStyle(
-                //         color: Color(0xFFF98411),
-                //         fontSize: 20.0,
-                //         fontWeight: FontWeight.w500,
-                //       ),
-                //     ),
-                //   ),
-                //   trailing: Container(
-                //     width: 50,
-                //     height: 50,
-                //     decoration: BoxDecoration(
-                //       color: Colors.black,
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: Icon(
-                //       Icons.pause,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Get your gear setup & ready to work.',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 16.0,
-                        color: Color(0xFF4C5264),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                // SizedBox(
-                //   height: 10.0,
-                // ),
-                Padding(
-                  padding: EdgeInsets.only(top: 24.0),
-                  child: Container(
-                    width: 305,
-                    height: 58,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF2E2E2E),
-                      borderRadius: BorderRadius.circular(52),
-                    ),
-                    child: Icon(
-                      Icons.arrow_forward,
-                      size: 24.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
@@ -428,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         SizedBox(
-                          height: 239,
+                          height: 260,
                         ),
                       ],
                     ),
@@ -557,6 +397,169 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+      bottomSheet: Container(
+        // color: Colors.red,
+        // width: double.infinity,
+        decoration: new BoxDecoration(
+          boxShadow: [
+            new BoxShadow(
+              color: Colors.black12,
+              blurRadius: 16.0,
+            ),
+          ],
+        ),
+        height: 239,
+        child: Card(
+          margin: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+          ),
+          elevation: 20.0,
+          shadowColor: Color(0X4C52641A),
+          child: Padding(
+            padding: EdgeInsets.only(left: 15.0, right: 5.0, top: 10.0),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: Image.network(
+                      'https://googleflutter.com/sample_image.jpg',
+                      // width: 100,
+                      height: 70,
+                      width: 65,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  title: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'John’s Doe',
+                      style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF4C5264)),
+                    ),
+                  ),
+                  subtitle: Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      // mainAxisAlignment: MainAxisAlignment.sp,
+                      children: [
+                        Text(
+                          '4.5',
+                          style: TextStyle(
+                              fontFamily: 'Montserrat',
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF4C5264)),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 5.7),
+                          child: Icon(
+                            Icons.star,
+                            color: Color(0xFFFFB900),
+                            size: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  trailing: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Icon(
+                      Icons.chat,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Color(0xFF4C5264),
+                  thickness: 0.05,
+                ),
+                // ListTile(
+                //   leading: Text(
+                //     'TIMER',
+                //     style: TextStyle(
+                //       color: Color(0xFF4C5264),
+                //       fontSize: 22.0,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                //   title: Align(
+                //     alignment: Alignment.center,
+                //     child: Text(
+                //       '00:10:24',
+                //       style: TextStyle(
+                //         color: Color(0xFFF98411),
+                //         fontSize: 20.0,
+                //         fontWeight: FontWeight.w500,
+                //       ),
+                //     ),
+                //   ),
+                //   trailing: Container(
+                //     width: 50,
+                //     height: 50,
+                //     decoration: BoxDecoration(
+                //       color: Colors.black,
+                //       borderRadius: BorderRadius.circular(20),
+                //     ),
+                //     child: Icon(
+                //       Icons.pause,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Get your gear setup & ready to work.',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16.0,
+                        color: Color(0xFF4C5264),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                // SizedBox(
+                //   height: 10.0,
+                // ),
+                Padding(
+                  padding: EdgeInsets.only(top: 24.0),
+                  child: Container(
+                    width: 305,
+                    height: 58,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF2E2E2E),
+                      borderRadius: BorderRadius.circular(52),
+                    ),
+                    child: Icon(
+                      Icons.arrow_forward,
+                      size: 24.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
