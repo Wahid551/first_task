@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:first_task/Screens/notification.dart';
 // import 'package:first_task/Screens/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -96,6 +97,14 @@ class _HomePageState extends State<HomePage> {
       bottomSheet: Container(
         // color: Colors.red,
         // width: double.infinity,
+        decoration: new BoxDecoration(
+          boxShadow: [
+            new BoxShadow(
+              color: Colors.black54,
+              blurRadius: 20.0,
+            ),
+          ],
+        ),
         height: 239,
         child: Card(
           margin: EdgeInsets.zero,
@@ -105,7 +114,8 @@ class _HomePageState extends State<HomePage> {
               topRight: Radius.circular(10),
             ),
           ),
-          elevation: 10.0,
+          elevation: 20.0,
+          shadowColor: Colors.black,
           child: Padding(
             padding: EdgeInsets.only(left: 15.0, right: 5.0, top: 10.0),
             child: Column(
@@ -173,6 +183,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Divider(
                   color: Color(0xFF4C5264),
+                  thickness: 0.05,
                 ),
                 // ListTile(
                 //   leading: Text(
@@ -430,114 +441,124 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: Container(
-        width: double.infinity,
-        height: 64,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(14),
-            topRight: Radius.circular(14),
+        color: Colors.white,
+        child: Container(
+          // color: Colors.transparent,
+          width: double.infinity,
+          height: 64,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(14),
+              topRight: Radius.circular(14),
+            ),
+            color: Color(0xFF2E2E2E),
           ),
-          color: Color(0xFF2E2E2E),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            GestureDetector(
-              onTap: () {},
-              child: Image.asset(
-                'assets/icons/calender.png',
-                height: 24.5,
-              ),
-            ),
-            SizedBox(
-              height: 23.3,
-              width: 2,
-              child: Container(
-                // height:20,
-                color: Color(0xFF4C5264),
-              ),
-            ),
-            Badge(
-              position: BadgePosition.topEnd(top: -14),
-              // alignment: Alignment.topRight,
-
-              badgeContent: Text(
-                '5',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
-                ),
-              ),
-              badgeColor: Color(0xFFF9C311),
-              child: GestureDetector(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              GestureDetector(
                 onTap: () {},
                 child: Image.asset(
-                  'assets/icons/np_new-project_643613_000000@3x.png',
+                  'assets/icons/calender.png',
                   height: 24.5,
                 ),
               ),
-            ),
-            SizedBox(
-              height: 23.3,
-              width: 2,
-              child: Container(
-                // height:20,
-                color: Color(0xFF4C5264),
+              SizedBox(
+                height: 23.3,
+                width: 2,
+                child: Container(
+                  // height:20,
+                  color: Color(0xFF4C5264),
+                ),
               ),
-            ),
-            Badge(
-              // borderRadius: BorderRadius.circular(5),
-              position: BadgePosition.topEnd(top: -14),
-              // alignment: Alignment.topRight,
+              Badge(
+                position: BadgePosition.topEnd(top: -14),
+                // alignment: Alignment.topRight,
 
-              badgeContent: Text(
-                '5',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
+                badgeContent: Text(
+                  '5',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.white,
+                  ),
+                ),
+                badgeColor: Color(0xFFF9C311),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Image.asset(
+                    'assets/icons/np_new-project_643613_000000@3x.png',
+                    height: 24.5,
+                  ),
                 ),
               ),
-              badgeColor: Color(0xFFF9C311),
-              child: GestureDetector(
+              SizedBox(
+                height: 23.3,
+                width: 2,
+                child: Container(
+                  // height:20,
+                  color: Color(0xFF4C5264),
+                ),
+              ),
+              Badge(
+                // borderRadius: BorderRadius.circular(5),
+                position: BadgePosition.topEnd(top: -14),
+                // alignment: Alignment.topRight,
+
+                badgeContent: Text(
+                  '5',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.white,
+                  ),
+                ),
+                badgeColor: Color(0xFFF9C311),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.chat,
+                    size: 25,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 23.3,
+                width: 2,
+                child: Container(
+                  // height:20,
+                  color: Color(0xFF4C5264),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: ((context) => NotificationPage()),
+                    ),
+                  );
+                },
+                child: Image.asset(
+                  'assets/icons/path@3x.png',
+                  height: 24.5,
+                ),
+              ),
+              SizedBox(
+                height: 23.3,
+                width: 2,
+                child: Container(
+                  // height:20,
+                  color: Color(0xFF4C5264),
+                ),
+              ),
+              GestureDetector(
                 onTap: () {},
-                child: Icon(
-                  Icons.chat,
-                  size: 25,
-                  color: Colors.white,
+                child: Image.asset(
+                  'assets/icons/np_more_2680300_000000@3x.png',
+                  height: 5.78,
                 ),
               ),
-            ),
-            SizedBox(
-              height: 23.3,
-              width: 2,
-              child: Container(
-                // height:20,
-                color: Color(0xFF4C5264),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Image.asset(
-                'assets/icons/path@3x.png',
-                height: 24.5,
-              ),
-            ),
-            SizedBox(
-              height: 23.3,
-              width: 2,
-              child: Container(
-                // height:20,
-                color: Color(0xFF4C5264),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Image.asset(
-                'assets/icons/np_more_2680300_000000@3x.png',
-                height: 5.78,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
