@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:first_task/Screens/notification.dart';
@@ -21,9 +23,38 @@ class _HomePageState extends State<HomePage> {
     'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
   ];
 
+  Duration duration = Duration();
+  Timer? timer;
   List<Widget> imageSliders = [];
   int _current = 0;
-  // bool isClicked = false;
+  bool isClicked = false;
+  int min = 10;
+
+  static const countdownDuration = Duration(minutes: 10);
+  bool isCountdown = true;
+  // int seconds = 0;
+  void timerIncreament({bool resets = true}) {
+    if (resets) {
+      reset();
+    }
+    timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) {
+        // Update user about remaining time
+        addTime();
+      },
+    );
+  }
+
+  void addTime() {
+    final addSeconds = 1;
+
+    setState(() {
+      final seconds = duration.inSeconds + addSeconds;
+      duration = Duration(seconds: seconds);
+    });
+  }
+
   void listItems() {
     Size size = MediaQuery.of(context).size;
     imageSliders = imgList
@@ -89,6 +120,77 @@ class _HomePageState extends State<HomePage> {
               )),
             ))
         .toList();
+  }
+
+  void reset() {
+    if (isCountdown) {
+      setState(() {
+        duration = countdownDuration;
+      });
+    } else {
+      setState(() {
+        duration = Duration();
+      });
+    }
+  }
+
+  void stopTimer({bool resets = true}) {
+    if (resets) {
+      reset();
+    }
+    setState(() {
+      timer!.cancel();
+    });
+  }
+
+  Widget buildTime() {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    final hours = twoDigits(duration.inHours.remainder(60));
+
+    return Text(
+      '$hours:$minutes:$seconds',
+      style: TextStyle(
+        fontFamily: 'Montserrat',
+        color: Color(0xFFF98411),
+        fontSize: 20.0,
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+
+  Widget buttonWidget() {
+    final isRunning = timer == null ? false : timer!.isActive;
+    return GestureDetector(
+      onTap: () {
+        if (isRunning) {
+          stopTimer(resets: false);
+        } else {
+          timerIncreament(resets: false);
+        }
+      },
+      child: Container(
+        width: 39,
+        height: 39,
+        // margin: EdgeInsets.only(top: 0.0),
+        // padding: EdgeInsets.only(top: 0.0),
+        decoration: BoxDecoration(
+          color: isRunning ? Colors.black : Colors.amber,
+          // borderRadius: BorderRadius.circular(60),
+          shape: BoxShape.circle,
+        ),
+        child: isRunning
+            ? Icon(
+                Icons.pause,
+                color: Colors.white,
+              )
+            : Icon(
+                Icons.play_arrow,
+                color: Colors.white,
+              ),
+      ),
+    );
   }
 
   @override
@@ -491,70 +593,80 @@ class _HomePageState extends State<HomePage> {
                   color: Color(0xFF4C5264),
                   thickness: 0.05,
                 ),
-                // ListTile(
-                //   leading: Text(
-                //     'TIMER',
-                //     style: TextStyle(
-                //       color: Color(0xFF4C5264),
-                //       fontSize: 22.0,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                //   title: Align(
-                //     alignment: Alignment.center,
-                //     child: Text(
-                //       '00:10:24',
-                //       style: TextStyle(
-                //         color: Color(0xFFF98411),
-                //         fontSize: 20.0,
-                //         fontWeight: FontWeight.w500,
-                //       ),
-                //     ),
-                //   ),
-                //   trailing: Container(
-                //     width: 50,
-                //     height: 50,
-                //     decoration: BoxDecoration(
-                //       color: Colors.black,
-                //       borderRadius: BorderRadius.circular(20),
-                //     ),
-                //     child: Icon(
-                //       Icons.pause,
-                //       color: Colors.white,
-                //     ),
-                //   ),
-                // ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Get your gear setup & ready to work.',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 16.0,
-                        color: Color(0xFF4C5264),
-                        fontWeight: FontWeight.bold,
+                isClicked == true
+                    ? Container(
+                        width: 350,
+                        height: 60,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: 6, bottom: 0, left: 10.0, right: 15.0),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'TIMER',
+                                  style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    color: Color(0xFF4C5264),
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                buildTime(),
+                                buttonWidget(),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        width: 350,
+                        height: 60,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            top: 6.0,
+                            bottom: 0.0,
+                          ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Get your gear setup & ready to work.',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                fontSize: 16.0,
+                                color: Color(0xFF4C5264),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                // SizedBox(
-                //   height: 10.0,
-                // ),
                 Padding(
-                  padding: EdgeInsets.only(top: 24.0),
-                  child: Container(
-                    width: 305,
-                    height: 58,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF2E2E2E),
-                      borderRadius: BorderRadius.circular(52),
-                    ),
-                    child: Icon(
-                      Icons.arrow_forward,
-                      size: 24.0,
-                      color: Colors.white,
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isClicked = !isClicked;
+                        if (isClicked == true) {
+                          timerIncreament();
+                        } else {}
+                      });
+                    },
+                    child: Container(
+                      width: 305,
+                      height: 58,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF2E2E2E),
+                        borderRadius: BorderRadius.circular(52),
+                      ),
+                      child: Icon(
+                        Icons.arrow_forward,
+                        size: 24.0,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
