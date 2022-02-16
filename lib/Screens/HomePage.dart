@@ -26,8 +26,8 @@ class _HomePageState extends State<HomePage> {
   late PeriodicTimerProvider _periodicTimerProvider;
   @override
   void initState() {
-    ApiServiceProvider _service = Provider.of(context, listen: false);
-    _service.getPosts();
+    // ApiServiceProvider _service = Provider.of(context, listen: false);
+    // _service.getPosts();
     super.initState();
   }
 
