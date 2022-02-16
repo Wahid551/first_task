@@ -1,14 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:first_task/constants/Colors.dart';
+import 'package:first_task/constants/bottomNav.dart';
+import 'package:first_task/constants/images-list.dart';
 import 'package:first_task/constants/textstyle.dart';
-import 'package:first_task/constants/timer.dart';
+import 'package:first_task/services/timer_provider.dart';
 import 'package:first_task/model/model.dart';
 import 'package:first_task/services/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import '../constants/bottomNav.dart';
-import '../constants/images-list.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -152,12 +152,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _periodicTimerProvider = Provider.of(context);
-    _apiServiceProvider = Provider.of(context);
-    _apiServiceProvider.getPosts().then((value) {
-      futureData = value;
-    });
-    listItems();
+    try {
+      _periodicTimerProvider = Provider.of(context);
+      _apiServiceProvider = Provider.of(context);
+      _apiServiceProvider.getPosts().then((value) {
+        futureData = value;
+      });
+      listItems();
+    } catch (error) {
+      print('Error while getting data $error');
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: _apiServiceProvider.isData == false

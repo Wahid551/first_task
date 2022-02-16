@@ -7,8 +7,7 @@ import '../model/model.dart';
 class ApiServiceProvider extends ChangeNotifier {
   bool isData = false;
   Future<Album> getPosts() async {
-    // ignore: non_constant_identifier_names
-    Album? NewsModel;
+    Album? newsModel;
     try {
       final response = await http
           .get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
@@ -16,15 +15,16 @@ class ApiServiceProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         var jsonString = response.body;
         var jsonMap = jsonDecode(jsonString);
-        NewsModel = Album.fromJson(jsonMap[0]);
+        newsModel = Album.fromJson(jsonMap[0]);
         isData = true;
         notifyListeners();
       }
+      return newsModel!;
     } catch (exception) {
       isData = true;
       notifyListeners();
+
       throw exception;
     }
-    return NewsModel!;
   }
 }

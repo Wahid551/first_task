@@ -1,7 +1,6 @@
-import 'package:badges/badges.dart';
 import 'package:first_task/constants/widgets.dart';
 import 'package:flutter/material.dart';
-
+import '../Screens/MainScreens/Home/bottom_bar.dart';
 import '../Screens/notification.dart';
 
 class BottomNavigationBarr extends StatefulWidget {
@@ -17,7 +16,6 @@ class _BottomNavigationBarrState extends State<BottomNavigationBarr> {
     return Container(
       color: Colors.white,
       child: Container(
-        // color: Colors.transparent,
         width: double.infinity,
         height: 64,
         decoration: BoxDecoration(
@@ -30,40 +28,24 @@ class _BottomNavigationBarrState extends State<BottomNavigationBarr> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            GestureDetector(
+            BottomBar(
               onTap: () {},
-              child: Image.asset(
-                'assets/icons/calender.png',
-                height: 24.5,
-              ),
+              imagePath: 'assets/icons/calender.png',
             ),
             lineBorder(),
-            badge('5', 'assets/icons/np_new-project_643613_000000@3x.png'),
-            lineBorder(),
-            Badge(
-              // borderRadius: BorderRadius.circular(5),
-              position: BadgePosition.topEnd(top: -14),
-              // alignment: Alignment.topRight,
-
-              badgeContent: Text(
-                '5',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: Colors.white,
-                ),
-              ),
-              badgeColor: Color(0xFFF9C311),
-              child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.chat,
-                  size: 25,
-                  color: Colors.white,
-                ),
-              ),
+            BottomBar(
+              onTap: () {},
+              imagePath: 'assets/icons/np_new-project_643613_000000@3x.png',
+              badgeCount: 5,
             ),
             lineBorder(),
-            GestureDetector(
+            BottomBar(
+              onTap: () {},
+              imagePath: 'assets/icons/np_new-project_643613_000000@3x.png',
+              badgeCount: 6,
+            ),
+            lineBorder(),
+            BottomBar(
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -71,18 +53,12 @@ class _BottomNavigationBarrState extends State<BottomNavigationBarr> {
                   ),
                 );
               },
-              child: Image.asset(
-                'assets/icons/path@3x.png',
-                height: 24.5,
-              ),
+              imagePath: 'assets/icons/path@3x.png',
             ),
             lineBorder(),
-            GestureDetector(
+            BottomBar(
               onTap: () {},
-              child: Image.asset(
-                'assets/icons/np_more_2680300_000000@3x.png',
-                height: 5.78,
-              ),
+              imagePath: 'assets/icons/np_more_2680300_000000@3x.png',
             ),
           ],
         ),

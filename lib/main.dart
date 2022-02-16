@@ -1,8 +1,8 @@
-import 'package:first_task/constants/timer.dart';
+import 'package:first_task/Screens/MainScreens/Home/HomePage.dart';
+import 'package:first_task/services/timer_provider.dart';
 import 'package:first_task/services/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'Screens/HomePage.dart';
 
 void main() {
   runApp(MyApp());
