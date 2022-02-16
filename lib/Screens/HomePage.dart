@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:first_task/Screens/notification.dart';
+import 'package:first_task/model/model.dart';
+import 'package:first_task/services/fetchApiData.dart';
 // import 'package:first_task/Screens/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -32,6 +34,27 @@ class _HomePageState extends State<HomePage> {
 
   static const countdownDuration = Duration(minutes: 10);
   bool isCountdown = true;
+  late Album futureData;
+  @override
+  void initState() {
+    super.initState();
+    future();
+  }
+
+  void future() async {
+    try {
+      futureData = await ApiService().getPosts();
+      setState(() {
+        isData = true;
+      });
+    } catch (exception) {
+      setState(() {
+        isData = true;
+      });
+      print(exception);
+    }
+  }
+
   // int seconds = 0;
   void timerIncreament({bool resets = true}) {
     if (resets) {
@@ -193,194 +216,230 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // Widget futureDataa() {
+  //   return FutureBuilder<dynamic>(
+  //     future: futureData,
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasData) {
+  //         return Text(
+  //           snapshot.data['title'],
+  //           style: TextStyle(
+  //             fontFamily: 'Montserrat',
+  //             color: Color(0xFF4C5264),
+  //             fontSize: 16.0,
+  //             fontWeight: FontWeight.w600,
+  //           ),
+  //         );
+  //       } else if (snapshot.hasError) {
+  //         return Text('No Data');
+  //         // return Text('${snapshot.error}');
+  //       }
+
+  //       // By default, show a loading spinner.
+  //       return const CircularProgressIndicator();
+  //     },
+  //   );
+  // }
+  bool isData = false;
   @override
   Widget build(BuildContext context) {
     listItems();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    // width: size.width*50,
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                        aspectRatio: 2,
-                        enlargeCenterPage: true,
-                        scrollDirection: Axis.horizontal,
-                        viewportFraction: 1,
-                        // enlargeStrategy: CenterPageEnlargeStrategy.height,
-                        autoPlay: true,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _current = index;
-                          });
-                        },
-                      ),
-                      items: imageSliders,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 24.0, right: 6.0, top: 10.0),
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      // mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      body: isData == false
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Column(
                       children: [
-                        Text(
-                          'Lawn Mowing',
-                          style: TextStyle(
-                              fontFamily: 'Quicksand',
-                              fontSize: 22.0,
-                              color: Color(0xFF43A236),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          'Small Grass - 3 hours',
-                          style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              fontSize: 16.0,
-                              color: Color(0xFF4C5264),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: 15.0,
-                        ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/ico.svg',
-                              color: Color(0xFF43A236),
-                              height: 15.51,
+                        Container(
+                          // width: size.width*50,
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                              aspectRatio: 2,
+                              enlargeCenterPage: true,
+                              scrollDirection: Axis.horizontal,
+                              viewportFraction: 1,
+                              // enlargeStrategy: CenterPageEnlargeStrategy.height,
+                              autoPlay: true,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              },
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 25.49),
-                              child: Text(
-                                'Today 5th March 2019, 07:30 AM',
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF4C5264),
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
+                            items: imageSliders,
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                            left: 41,
-                            top: 10.0,
-                            bottom: 10.0,
-                          ),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Recurring, Every 2 weeks',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 16.0,
-                                color: Color(0xFF4C5264),
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/path.svg',
-                              color: Color(0xFF43A236),
-                              height: 15.51,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 28.49),
-                              child: Text(
-                                '221B Baker Street',
+                              left: 24.0, right: 6.0, top: 10.0),
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Lawn Mowing',
                                 style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF4C5264),
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w600,
+                                    fontFamily: 'Quicksand',
+                                    fontSize: 22.0,
+                                    color: Color(0xFF43A236),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Text(
+                                'Small Grass - 3 hours',
+                                style: TextStyle(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 16.0,
+                                    color: Color(0xFF4C5264),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/icons/ico.svg',
+                                    color: Color(0xFF43A236),
+                                    height: 15.51,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 25.49),
+                                    child: Text(
+                                      // ignore: unnecessary_null_comparison
+                                      futureData.title == null
+                                          ? ''
+                                          : futureData.title,
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        color: Color(0xFF4C5264),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 41,
+                                  top: 10.0,
+                                  bottom: 10.0,
+                                ),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Recurring, Every 2 weeks',
+                                    style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 16.0,
+                                      color: Color(0xFF4C5264),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 41,
-                            top: 0.0,
-                            bottom: 10.0,
-                          ),
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Sector 28, Phase 2, New York, USA',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 16.0,
-                                color: Color(0xFF4C5264),
-                                fontWeight: FontWeight.normal,
+                              Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/icons/path.svg',
+                                    color: Color(0xFF43A236),
+                                    height: 15.51,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 28.49),
+                                    child: Text(
+                                      // ignore: unnecessary_null_comparison
+                                      futureData.body == null
+                                          ? ''
+                                          : futureData.body,
+                                      style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        color: Color(0xFF4C5264),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ),
-                        ),
-                        // ListTile(
-                        //   leading: Text('Wahid'),
-                        //   minLeadingWidth: 15.51,
-                        // ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.menu,
-                              color: Color(0xFF43A236),
-                              size: 15.51,
-                            ),
-                            SizedBox(
-                              width: 25.0,
-                            ),
-                            Expanded(
-                              flex: 30,
-                              child: Text(
-                                'Lorem Ipsum is simply dummy, typesetting industry Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-                                // textDirection: TextDirection.ltr,
-                                style: TextStyle(
-                                  // overflow: TextOverflow.ellipsis,
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF4C5264),
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w300,
-                                  // overflow: TextOverflow.ellipsis,
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  left: 41,
+                                  top: 0.0,
+                                  bottom: 10.0,
                                 ),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Sector 28, Phase 2, New York, USA',
+                                    style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 16.0,
+                                      color: Color(0xFF4C5264),
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // ListTile(
+                              //   leading: Text('Wahid'),
+                              //   minLeadingWidth: 15.51,
+                              // ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.menu,
+                                    color: Color(0xFF43A236),
+                                    size: 15.51,
+                                  ),
+                                  SizedBox(
+                                    width: 25.0,
+                                  ),
+                                  Expanded(
+                                    flex: 30,
+                                    child: Text(
+                                      'Lorem Ipsum is simply dummy, typesetting industry Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+                                      // textDirection: TextDirection.ltr,
+                                      style: TextStyle(
+                                        // overflow: TextOverflow.ellipsis,
+                                        fontFamily: 'Montserrat',
+                                        color: Color(0xFF4C5264),
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w300,
+                                        // overflow: TextOverflow.ellipsis,
+                                      ),
 
-                                // softWrap: true,
-                                // textAlign: TextAlign.justify,
-                                // overflow: TextOverflow.ellipsis,
-                                // maxLines: 5,
+                                      // softWrap: true,
+                                      // textAlign: TextAlign.justify,
+                                      // overflow: TextOverflow.ellipsis,
+                                      // maxLines: 5,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 260,
+                              SizedBox(
+                                height: 260,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
       bottomNavigationBar: Container(
         color: Colors.white,
         child: Container(
@@ -597,29 +656,24 @@ class _HomePageState extends State<HomePage> {
                     ? Container(
                         width: 350,
                         height: 60,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: 6, bottom: 0, left: 10.0, right: 15.0),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'TIMER',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xFF4C5264),
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                buildTime(),
-                                buttonWidget(),
-                              ],
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 0.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'TIMER',
+                              style: TextStyle(
+                                fontFamily: 'Montserrat',
+                                color: Color(0xFF4C5264),
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                          ),
+                            buildTime(),
+                            buttonWidget(),
+                          ],
                         ),
                       )
                     : Container(
@@ -652,7 +706,9 @@ class _HomePageState extends State<HomePage> {
                         isClicked = !isClicked;
                         if (isClicked == true) {
                           timerIncreament();
-                        } else {}
+                        } else {
+                          stopTimer();
+                        }
                       });
                     },
                     child: Container(
