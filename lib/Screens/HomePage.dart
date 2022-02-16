@@ -1,14 +1,14 @@
-import 'dart:async';
-
-import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:first_task/Screens/notification.dart';
+import 'package:first_task/constants/Colors.dart';
+import 'package:first_task/constants/textstyle.dart';
+import 'package:first_task/constants/timer.dart';
 import 'package:first_task/model/model.dart';
-import 'package:first_task/services/fetchApiData.dart';
-// import 'package:first_task/Screens/components.dart';
+import 'package:first_task/services/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-// import 'package:badges/badges.dart';
+import 'package:provider/provider.dart';
+import '../constants/bottomNav.dart';
+import '../constants/images-list.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,66 +16,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<String> imgList = [
-    'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-    'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-    'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-    'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-    'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
-  ];
-
-  Duration duration = Duration();
-  Timer? timer;
   List<Widget> imageSliders = [];
   int _current = 0;
   bool isClicked = false;
   int min = 10;
 
-  static const countdownDuration = Duration(minutes: 10);
-  bool isCountdown = true;
   late Album futureData;
+  late ApiServiceProvider _apiServiceProvider;
+  late PeriodicTimerProvider _periodicTimerProvider;
   @override
   void initState() {
+    ApiServiceProvider _service = Provider.of(context, listen: false);
+    _service.getPosts();
     super.initState();
-    future();
-  }
-
-  void future() async {
-    try {
-      futureData = await ApiService().getPosts();
-      setState(() {
-        isData = true;
-      });
-    } catch (exception) {
-      setState(() {
-        isData = true;
-      });
-      print(exception);
-    }
-  }
-
-  // int seconds = 0;
-  void timerIncreament({bool resets = true}) {
-    if (resets) {
-      reset();
-    }
-    timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (_) {
-        // Update user about remaining time
-        addTime();
-      },
-    );
-  }
-
-  void addTime() {
-    final addSeconds = 1;
-
-    setState(() {
-      final seconds = duration.inSeconds + addSeconds;
-      duration = Duration(seconds: seconds);
-    });
   }
 
   void listItems() {
@@ -145,32 +98,14 @@ class _HomePageState extends State<HomePage> {
         .toList();
   }
 
-  void reset() {
-    if (isCountdown) {
-      setState(() {
-        duration = countdownDuration;
-      });
-    } else {
-      setState(() {
-        duration = Duration();
-      });
-    }
-  }
-
-  void stopTimer({bool resets = true}) {
-    if (resets) {
-      reset();
-    }
-    setState(() {
-      timer!.cancel();
-    });
-  }
-
   Widget buildTime() {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-    final hours = twoDigits(duration.inHours.remainder(60));
+    final minutes =
+        twoDigits(_periodicTimerProvider.duration.inMinutes.remainder(60));
+    final seconds =
+        twoDigits(_periodicTimerProvider.duration.inSeconds.remainder(60));
+    final hours =
+        twoDigits(_periodicTimerProvider.duration.inHours.remainder(60));
 
     return Text(
       '$hours:$minutes:$seconds',
@@ -184,23 +119,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buttonWidget() {
-    final isRunning = timer == null ? false : timer!.isActive;
+    final isRunning = _periodicTimerProvider.timer == null
+        ? false
+        : _periodicTimerProvider.timer!.isActive;
     return GestureDetector(
       onTap: () {
         if (isRunning) {
-          stopTimer(resets: false);
+          _periodicTimerProvider.stopTimer(resets: false);
         } else {
-          timerIncreament(resets: false);
+          _periodicTimerProvider.timerIncreament(resets: false);
         }
       },
       child: Container(
         width: 39,
         height: 39,
-        // margin: EdgeInsets.only(top: 0.0),
-        // padding: EdgeInsets.only(top: 0.0),
         decoration: BoxDecoration(
           color: isRunning ? Colors.black : Colors.amber,
-          // borderRadius: BorderRadius.circular(60),
           shape: BoxShape.circle,
         ),
         child: isRunning
@@ -216,37 +150,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget futureDataa() {
-  //   return FutureBuilder<dynamic>(
-  //     future: futureData,
-  //     builder: (context, snapshot) {
-  //       if (snapshot.hasData) {
-  //         return Text(
-  //           snapshot.data['title'],
-  //           style: TextStyle(
-  //             fontFamily: 'Montserrat',
-  //             color: Color(0xFF4C5264),
-  //             fontSize: 16.0,
-  //             fontWeight: FontWeight.w600,
-  //           ),
-  //         );
-  //       } else if (snapshot.hasError) {
-  //         return Text('No Data');
-  //         // return Text('${snapshot.error}');
-  //       }
-
-  //       // By default, show a loading spinner.
-  //       return const CircularProgressIndicator();
-  //     },
-  //   );
-  // }
-  bool isData = false;
   @override
   Widget build(BuildContext context) {
+    _periodicTimerProvider = Provider.of(context);
+    _apiServiceProvider = Provider.of(context);
+    _apiServiceProvider.getPosts().then((value) {
+      futureData = value;
+    });
     listItems();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: isData == false
+      body: _apiServiceProvider.isData == false
           ? Center(
               child: CircularProgressIndicator(),
             )
@@ -257,14 +171,12 @@ class _HomePageState extends State<HomePage> {
                     Column(
                       children: [
                         Container(
-                          // width: size.width*50,
                           child: CarouselSlider(
                             options: CarouselOptions(
                               aspectRatio: 2,
                               enlargeCenterPage: true,
                               scrollDirection: Axis.horizontal,
                               viewportFraction: 1,
-                              // enlargeStrategy: CenterPageEnlargeStrategy.height,
                               autoPlay: true,
                               onPageChanged: (index, reason) {
                                 setState(() {
@@ -279,28 +191,18 @@ class _HomePageState extends State<HomePage> {
                           padding: EdgeInsets.only(
                               left: 24.0, right: 6.0, top: 10.0),
                           child: Column(
-                            // mainAxisAlignment: MainAxisAlignment.start,
-                            // mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Lawn Mowing',
-                                style: TextStyle(
-                                    fontFamily: 'Quicksand',
-                                    fontSize: 22.0,
-                                    color: Color(0xFF43A236),
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyling.quickTitle,
                               ),
                               SizedBox(
                                 height: 10.0,
                               ),
                               Text(
                                 'Small Grass - 3 hours',
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    fontSize: 16.0,
-                                    color: Color(0xFF4C5264),
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyling.title2,
                               ),
                               SizedBox(
                                 height: 15.0,
@@ -309,21 +211,21 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   SvgPicture.asset(
                                     'assets/icons/ico.svg',
-                                    color: Color(0xFF43A236),
+                                    color: homeIconColor,
                                     height: 15.51,
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 25.49),
-                                    child: Text(
-                                      // ignore: unnecessary_null_comparison
-                                      futureData.title == null
-                                          ? ''
-                                          : futureData.title,
-                                      style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF4C5264),
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w600,
+                                  Flexible(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 25.49),
+                                      child: Text(
+                                        futureData.title.isEmpty
+                                            ? ''
+                                            : futureData.title,
+                                        style: TextStyling.title2.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        maxLines: 1,
                                       ),
                                     ),
                                   ),
@@ -339,35 +241,29 @@ class _HomePageState extends State<HomePage> {
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     'Recurring, Every 2 weeks',
-                                    style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 16.0,
-                                      color: Color(0xFF4C5264),
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                                    style: TextStyling.title2.copyWith(
+                                        fontWeight: FontWeight.normal),
                                   ),
                                 ),
                               ),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SvgPicture.asset(
                                     'assets/icons/path.svg',
-                                    color: Color(0xFF43A236),
+                                    color: homeIconColor,
                                     height: 15.51,
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 28.49),
-                                    child: Text(
-                                      // ignore: unnecessary_null_comparison
-                                      futureData.body == null
-                                          ? ''
-                                          : futureData.body,
-                                      style: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF4C5264),
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                  Flexible(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(left: 28.49),
+                                      child: Text(
+                                          futureData.body.isEmpty
+                                              ? ''
+                                              : futureData.body,
+                                          style: TextStyling.title2.copyWith(
+                                              fontWeight: FontWeight.w600),
+                                          maxLines: 2),
                                     ),
                                   ),
                                 ],
@@ -382,48 +278,28 @@ class _HomePageState extends State<HomePage> {
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     'Sector 28, Phase 2, New York, USA',
-                                    style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 16.0,
-                                      color: Color(0xFF4C5264),
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                                    style: TextStyling.title2.copyWith(
+                                        fontWeight: FontWeight.normal),
                                   ),
                                 ),
                               ),
-                              // ListTile(
-                              //   leading: Text('Wahid'),
-                              //   minLeadingWidth: 15.51,
-                              // ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Icon(
                                     Icons.menu,
-                                    color: Color(0xFF43A236),
+                                    color: homeIconColor,
                                     size: 15.51,
                                   ),
                                   SizedBox(
                                     width: 25.0,
                                   ),
-                                  Expanded(
-                                    flex: 30,
+                                  Flexible(
                                     child: Text(
-                                      'Lorem Ipsum is simply dummy, typesetting industry Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
-                                      // textDirection: TextDirection.ltr,
-                                      style: TextStyle(
-                                        // overflow: TextOverflow.ellipsis,
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF4C5264),
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.w300,
-                                        // overflow: TextOverflow.ellipsis,
-                                      ),
-
-                                      // softWrap: true,
-                                      // textAlign: TextAlign.justify,
-                                      // overflow: TextOverflow.ellipsis,
-                                      // maxLines: 5,
+                                      futureData.body,
+                                      style: TextStyling.title2.copyWith(
+                                          fontWeight: FontWeight.w300),
+                                      maxLines: 3,
                                     ),
                                   ),
                                 ],
@@ -440,130 +316,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        child: Container(
-          // color: Colors.transparent,
-          width: double.infinity,
-          height: 64,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(14),
-              topRight: Radius.circular(14),
-            ),
-            color: Color(0xFF2E2E2E),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                onTap: () {},
-                child: Image.asset(
-                  'assets/icons/calender.png',
-                  height: 24.5,
-                ),
-              ),
-              SizedBox(
-                height: 23.3,
-                width: 2,
-                child: Container(
-                  // height:20,
-                  color: Color(0xFF4C5264),
-                ),
-              ),
-              Badge(
-                position: BadgePosition.topEnd(top: -14),
-                // alignment: Alignment.topRight,
-
-                badgeContent: Text(
-                  '5',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.white,
-                  ),
-                ),
-                badgeColor: Color(0xFFF9C311),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Image.asset(
-                    'assets/icons/np_new-project_643613_000000@3x.png',
-                    height: 24.5,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 23.3,
-                width: 2,
-                child: Container(
-                  // height:20,
-                  color: Color(0xFF4C5264),
-                ),
-              ),
-              Badge(
-                // borderRadius: BorderRadius.circular(5),
-                position: BadgePosition.topEnd(top: -14),
-                // alignment: Alignment.topRight,
-
-                badgeContent: Text(
-                  '5',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.white,
-                  ),
-                ),
-                badgeColor: Color(0xFFF9C311),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.chat,
-                    size: 25,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 23.3,
-                width: 2,
-                child: Container(
-                  // height:20,
-                  color: Color(0xFF4C5264),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: ((context) => NotificationPage()),
-                    ),
-                  );
-                },
-                child: Image.asset(
-                  'assets/icons/path@3x.png',
-                  height: 24.5,
-                ),
-              ),
-              SizedBox(
-                height: 23.3,
-                width: 2,
-                child: Container(
-                  // height:20,
-                  color: Color(0xFF4C5264),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Image.asset(
-                  'assets/icons/np_more_2680300_000000@3x.png',
-                  height: 5.78,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: BottomNavigationBarr(),
       bottomSheet: Container(
-        // color: Colors.red,
-        // width: double.infinity,
         decoration: new BoxDecoration(
           boxShadow: [
             new BoxShadow(
@@ -592,7 +346,6 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(5.0),
                     child: Image.network(
                       'https://googleflutter.com/sample_image.jpg',
-                      // width: 100,
                       height: 70,
                       width: 65,
                       fit: BoxFit.cover,
@@ -660,15 +413,12 @@ class _HomePageState extends State<HomePage> {
                             EdgeInsets.symmetric(horizontal: 15, vertical: 0.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          // crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               'TIMER',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Color(0xFF4C5264),
+                              style: TextStyling.title2.copyWith(
                                 fontSize: 20.0,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                             buildTime(),
@@ -699,20 +449,20 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                 Padding(
-                  padding: EdgeInsets.only(top: 8.0),
+                  padding: EdgeInsets.only(top: 8.0, left: 10, right: 10),
                   child: GestureDetector(
                     onTap: () {
                       setState(() {
                         isClicked = !isClicked;
                         if (isClicked == true) {
-                          timerIncreament();
+                          _periodicTimerProvider.timerIncreament();
                         } else {
-                          stopTimer();
+                          _periodicTimerProvider.stopTimer();
                         }
                       });
                     },
                     child: Container(
-                      width: 305,
+                      width: double.infinity,
                       height: 58,
                       decoration: BoxDecoration(
                         color: Color(0xFF2E2E2E),
