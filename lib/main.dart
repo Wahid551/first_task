@@ -4,6 +4,8 @@ import 'package:first_task/services/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'Screens/MainScreens/health_history_form/form.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePage(),
+        home: HealthHistoryForm(),
       ),
     );
   }

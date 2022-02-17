@@ -77,8 +77,17 @@ flutter:
         - asset: assets/fonts/Quicksand/Quicksand-Bold.ttf
         - asset: assets/fonts/Quicksand/Quicksand-Medium.ttf
        
+    - family: Barlow Condensed
+      fonts:
+        - asset: assets/fonts/barlow_condensed/BarlowCondensed-SemiBold.ttf
+        - asset: assets/fonts/barlow_condensed/BarlowCondensed-Regular.ttf
+        - asset: assets/fonts/barlow_condensed/BarlowCondensed-Light.ttf
 
-          style: italic
+    - family: Rubrik New
+      fonts:
+        - asset: assets/fonts/rubrik_new/Rubrik.otf
+        - asset: assets/fonts/rubrik_new/RubrikBold.otf
+        - asset: assets/fonts/rubrik_new/RubrikLightItalic-400.otf 
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
